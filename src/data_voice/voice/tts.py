@@ -6,7 +6,7 @@ The client is injectable so tests can stub it without real API calls.
 
 import io
 import logging
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 
 logger = logging.getLogger(__name__)
 
@@ -39,8 +39,8 @@ class TTSClient:
     """
 
     def __init__(self, api_key: str, config: TTSConfig) -> None:
-        from elevenlabs.client import ElevenLabs
         from elevenlabs import VoiceSettings
+        from elevenlabs.client import ElevenLabs
 
         self._client = ElevenLabs(api_key=api_key)
         self._config = config

@@ -1,10 +1,11 @@
 """Unit tests for the LLM agent and voice layer using stubs."""
 
 import pytest
-from data_voice.agent.agent import DataAgent, AgentResponse
-from data_voice.voice.tts import TTSClient, TTSConfig
+
+from data_voice.agent.agent import AgentResponse, DataAgent
 from data_voice.data.db import DataStore
-from data_voice.tools.query import QueryTool, QueryResult
+from data_voice.tools.query import QueryResult
+from data_voice.voice.tts import TTSConfig
 
 
 class StubLLMClient:

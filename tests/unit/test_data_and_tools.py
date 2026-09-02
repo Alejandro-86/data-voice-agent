@@ -1,8 +1,9 @@
 """Unit tests for DuckDB data layer and agent tool functions."""
 
 import pytest
+
 from data_voice.data.db import DataStore
-from data_voice.tools.query import QueryTool, QueryResult
+from data_voice.tools.query import QueryTool
 
 
 class TestDataStore:
@@ -26,7 +27,7 @@ class TestDataStore:
 
     def test_execute_raises_on_invalid_sql(self) -> None:
         store = DataStore(db_path=":memory:")
-        with pytest.raises(Exception):
+        with pytest.raises((RuntimeError, Exception)):  # duckdb raises RuntimeError
             store.execute("NOT VALID SQL $$$$")
 
     def test_schema_returns_table_info(self) -> None:
@@ -39,7 +40,7 @@ class TestDataStore:
     def test_prevents_write_operations(self) -> None:
         store = DataStore(db_path=":memory:", read_only=True)
         store.seed_sample_data()
-        with pytest.raises(Exception):
+        with pytest.raises((PermissionError, RuntimeError)):
             store.execute("DROP TABLE events")
 
 

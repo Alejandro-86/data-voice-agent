@@ -1,7 +1,7 @@
 """FastAPI application — /ask (text) and /ask/speak (audio) endpoints."""
 
+from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
-from typing import AsyncIterator
 
 import anthropic
 from fastapi import FastAPI, HTTPException
@@ -83,7 +83,7 @@ async def ask(request: AskRequest) -> AskResponse:
     try:
         response = _agent.ask(request.question)
     except ValueError as exc:
-        raise HTTPException(status_code=400, detail=str(exc))
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
     return AskResponse(
         question=response.question,
         answer=response.answer,
@@ -105,7 +105,7 @@ async def ask_and_speak(request: AskRequest) -> StreamingResponse:
         response = _agent.ask(request.question)
         audio = _tts.speak(response.answer, lang=request.lang)
     except ValueError as exc:
-        raise HTTPException(status_code=400, detail=str(exc))
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
 
     import io
     return StreamingResponse(io.BytesIO(audio), media_type="audio/mpeg")

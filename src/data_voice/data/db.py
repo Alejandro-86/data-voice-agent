@@ -6,7 +6,6 @@ for easy serialisation and LLM formatting.
 """
 
 import logging
-from pathlib import Path
 from typing import Any
 
 import duckdb
@@ -89,7 +88,7 @@ class DataStore:
         rel = self._conn.execute(sql)
         columns = [desc[0] for desc in rel.description]
         rows = rel.fetchall()
-        return [dict(zip(columns, row)) for row in rows]
+        return [dict(zip(columns, row, strict=True)) for row in rows]
 
     def get_schema(self) -> dict[str, list[dict[str, str]]]:
         """Return the schema of all tables as a dict.
